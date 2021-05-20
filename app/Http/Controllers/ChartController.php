@@ -14,8 +14,8 @@ class ChartController extends Controller
         $labels = $infos->pluck('id');
         $data = $infos->pluck('data');
 
-        //dd($data);
-        // return view('chart', compact('labels', 'data'));
+        // dd($infos);
+        // return view('welcome', compact('labels', 'data'));
         return response()->json(compact('labels', 'data'));
         }
 }
