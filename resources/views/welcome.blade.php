@@ -1,102 +1,98 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+<html lang="en">
 
-        <title>Laravel</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
-        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<body>
 
-        <style>
-            body {
-                font-family: 'Nunito', sans-serif;
-            }
-        </style>
-    </head>
-    <body class="container">
-        <x-chart canvas="canvas1" :name="['a', 'b', 'c']" :weight="['617594', '181045', '281045']"/>
-        <div id="message" x-data="{ showMessage: false, message: '' }">
-            <div x-show="showMessage">
-                <p class="text-sm leading-5 font-medium text-gray-900" x-text="message">
-                </p>
+    <div class="content container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        Dashboard
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Data update</h3>
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="container">
-            <canvas id="canvas2"></canvas>
-        </div>
-        
-        <script>
-            massPopChart = new Chart(canvas2, {
-            type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
             data: {
-                labels: ['a', 'b', 'c'],
-                datasets: [{
-                    label: 'Запонение',
-                    data: ['617594', '181045', '281045'],
-                    //backgroundColor:'green',
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)',
-                        'rgba(255, 159, 64, 0.6)',
-                        'rgba(255, 99, 132, 0.6)'
-                    ],
-                    borderWidth: 1,
-                    borderColor: '#777',
-                    hoverBorderWidth: 3,
-                    hoverBorderColor: '#000'
-                }]
+            labels: [],
+            datasets: [{
+                label: 'data',
+                data: [],
+                borderWidth: 1
+            }]
             },
             options: {
-                title: {
-                    display: true,
-                    text: 'Заполнение бочек углем',
-                    fontSize: 25
-                },
-                legend: {
-                    display: true,
-                    position: 'right',
-                    labels: {
-                        fontColor: '#000'
-                    }
-                },
-                layout: {
-                    padding: {
-                        left: 50,
-                        right: 0,
-                        bottom: 0,
-                        top: 0
-                    }
-                },
-                tooltips: {
-                    enabled: true
+            scales: {
+                xAxes: [],
+                yAxes: [{
+                ticks: {
+                    beginAtZero:true
                 }
+                }]
+            }
             }
         });
-        </script>
+        var updateChart = function() {
+            $.ajax({
+            url: "{{ route('chart') }}",
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                myChart.data.labels = data.labels;
+                myChart.data.datasets[0].data = data.data;
+                myChart.update();
+            },
+            error: function(data){
+                console.log(data);
+            }
+            });
+        }
         
-
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
-        <script src="{{ asset('js/app.js') }}"></script>
-        <script>
-            Echo.channel('events')
+        updateChart();
+        Echo.channel('events')
             //     .listen('RealTimeMessage', (e) => console.log('RealTimeMessage: ' + e.message));
             .listen('RealTimeMessage', (e) => {
-                let message = document.getElementById('message');
-                message.__x.$data.showMessage = true;
-                message.__x.$data.message = e.message;
-            });     
-                
-        </script>
-    </body>
+                updateChart();
+
+            });    
+        // setInterval(() => {
+        //     updateChart();
+        // }, 1000);
+    </script>
+
+</body>
+
 </html>

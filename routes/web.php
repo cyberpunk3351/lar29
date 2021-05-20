@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('chart', 'App\Http\Controllers\ChartController@index')->name('chart');
+Route::get('add', 'App\Http\Controllers\ChartController@add')->name('add');
+Route::post('add', 'App\Http\Controllers\ChartController@store')->name('store');
