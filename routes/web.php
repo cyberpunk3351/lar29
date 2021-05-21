@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\DataEvent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,17 @@ Route::get('/', function () {
 Route::get('chart', 'App\Http\Controllers\ChartController@index')->name('chart');
 Route::get('add', 'App\Http\Controllers\ChartController@add')->name('add');
 Route::post('add', 'App\Http\Controllers\ChartController@store')->name('store');
+
+Route::get('/notification', function () {
+    return view('notification');
+});
+
+Route::get('/send', function () {
+    return view('send');
+});
+Route::post('/send', function () {
+    $text = request()->text;
+    event(new DataEvent($text));
+});
+
+// Route::get('send', 'App\Http\Controllers\PusherNotificationController@notification');
