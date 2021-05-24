@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    \App\Events\PusherEvet::dispatch("Hello!");
     return view('welcome');
 });
 Route::get('chart', 'App\Http\Controllers\ChartController@index')->name('chart');
