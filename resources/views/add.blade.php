@@ -17,33 +17,14 @@
         <form action="{{ route('store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <input name="data" type="text" class="form-control">
+                <input name="data[data]" type="text" class="form-control">
             </div>
-            <input type="button" value="Создать" class="btn btn-outline-success" id="save">
+            <input type="submit" value="Создать" class="btn btn-outline-success" id="save">
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script>
-        $(document).on("click","#save",function(e){
-        e.preventDefault(); //Prevent page from submiting
-        $.ajax({
-        headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: 'post',
-        url: '/add',
-        data: {
-            'data': $('input[name="data[data]"]').val(),
-        },
-        success:function(store) {
-            location.href = add;
-        },
-        error:function() {
-        }
-        });
-        });
-    </script>
+
 </body>
