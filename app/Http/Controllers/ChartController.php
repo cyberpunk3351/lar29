@@ -26,7 +26,7 @@ class ChartController extends Controller
 
         public function store(Request $request) {
                 // Data::create($request->data);
-                $data = array($request->data);
+                $data = $request->data;
                 // dd($data);
                 event(new RealTimeMessage('Done!', $data));
                 return view('add');

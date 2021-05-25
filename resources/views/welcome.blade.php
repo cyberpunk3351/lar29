@@ -32,7 +32,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h3>Data update</h3>
-                                <canvas id="myChart"></canvas>
+                                <canvas id="canvas1"></canvas>
+                                {{-- <x-chart canvas="canvas1" :name="[]" :weight="[]"/> --}}
                             </div>
                         </div>
                     </div>
@@ -48,7 +49,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script>
-        var ctx = document.getElementById("myChart");
+        var ctx = document.getElementById("canvas1");
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -56,6 +57,15 @@
             datasets: [{
                 label: 'data',
                 data: [4, 3, 2, 1],
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(255, 99, 132, 0.6)'
+            ],
                 borderWidth: 1
             }]
             },
