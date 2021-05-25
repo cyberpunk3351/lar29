@@ -15,9 +15,9 @@ class ChartController extends Controller
         $labels = $infos->pluck('id');
         $data = $infos->pluck('data');
 
-        // dd($infos);
+        // dd($labels);
         // return view('welcome', compact('labels', 'data'));
-        return response()->json(compact('labels', 'data'));
+        // return response()->json(compact('labels', 'data'));
         }
 
         public function add(Request $request) {
@@ -25,8 +25,10 @@ class ChartController extends Controller
         }
 
         public function store(Request $request) {
-                Data::create($request->data);
-                event(new RealTimeMessage('Hello World'));
+                // Data::create($request->data);
+                $data = array($request->data);
+                // dd($data);
+                event(new RealTimeMessage('Done!', $data));
                 return view('add');
         }
 }
